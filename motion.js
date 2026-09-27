@@ -84,12 +84,12 @@
   }
 
   /* elements the site already animates in on its own (they use .visible) are left alone */
-  var OWN = '.reward-card,.podium-card,.social-card,.how-step,.faq-item';
+  var OWN = '.rh-card,.reward-card,.podium-card,.social-card,.how-step,.faq-item,.hub-card,.tier-card,.bonus-card,.refer-hero-card';
   var REVEAL = [
-    '.section-header', '.hub-card', '.tier-card', '.bonus-card', '.access-stake-banner-new', '.vip-rules-card',
+    '.section-header', '.rh-start', '.access-stake-banner-new', '.vip-rules-card', '.hrb-card', '.referral-gets',
     '.lb-tabs', '.countdown-bar', '.lb-pool-card', '.cutoff-banner', '.lb-podium-wrap', '.lb-table-wrap', '.wager-rules', '.claim-notice',
-    '.refer-update-banner', '.refer-hero-card', '.refer-section-label', '.rg-card', '.ref-step', '.hs-card', '.refer-cta',
-    '.stream-info', '.stream-card', '.paid-inner', '.legal-content > *', '.terms-content > *', '.privacy-content > *',
+    '.refer-update-banner', '.refer-section-label', '.rg-card', '.ref-step', '.refer-cta', '.refer-fine',
+    '.stream-info', '.stream-card', '.paid-inner', '.legal-wrap',
     '.footer-brand', '.footer-col', '.footer-responsible', '.footer-disclaimer'
   ].join(',');
   var els = [].slice.call(document.querySelectorAll(REVEAL)).filter(function(el){ return !el.matches(OWN) && !el.closest('.hero') && !el.closest('#mobile-bottom-nav'); });
@@ -117,7 +117,7 @@
         var h = el.querySelector && el.querySelector('.jm-split'); if(h) h.classList.add('jm-in');
         var tg = el.querySelector && el.querySelector('.section-tag'); if(tg) tg.classList.add('jm-sweep');
       });
-    }, { threshold: 0.12, rootMargin: '0px 0px -6% 0px' });
+    }, { threshold: 0, rootMargin: '0px 0px -8% 0px' }); /* threshold 0: very tall blocks (a 100-row leaderboard) must still reveal */
     els.forEach(function(el){ io.observe(el); });
     document.querySelectorAll('.jm-split').forEach(function(h){ if(!h.closest('.jm-rv')) io.observe(h); });
   }
@@ -146,11 +146,9 @@
     split(title); title.style.setProperty('--jm-d0', '.25s');
     setTimeout(function(){ title.classList.add('jm-in'); }, 40);
     var d2 = 0.1;
-    [].slice.call(heroContent.children).forEach(function(c){
-      if(c === title){ d2 = 0.95; return; }
-      if(c.id === 'hero-live-bar') return;
-      c.classList.add('jm-hin'); c.style.setProperty('--jm-d', d2 + 's'); d2 += 0.1;
-    });
+    /* the site already fades the hero pieces in; only the "$1,000,000 given away" pill needed one */
+    var ga = heroContent.querySelector('.hero-givenaway');
+    if(ga){ ga.classList.add('jm-hin'); ga.style.setProperty('--jm-d', '.22s'); }
 
     /* crossing gold marquee bands, between the rewards grid and "how it works" */
     var how = document.querySelector('.how-section');
@@ -170,6 +168,80 @@
   }
   function measureBands(){ bands.forEach(function(b){ var r = b.el.firstElementChild; b.w = r ? r.getBoundingClientRect().width : 0; if(b.dir > 0) b.x = -b.w; }); }
   if(bands.length){ setTimeout(measureBands, 300); if(document.fonts && document.fonts.ready) document.fonts.ready.then(measureBands); window.addEventListener('resize', measureBands); }
+
+  /* ---------- 7. polish: card beams, floating icons, count-ups, gold dust, table rows ---------- */
+  var CARDS = '.rh-card,.reward-card,.hub-card,.tier-card,.bonus-card,.social-card,.lb-pool-card,.refer-hero-card,.rg-card,.how-step,.countdown-bar,.vip-rules-card,.access-stake-banner-new,.faq-item,.ref-step';
+  var beamIO = ('IntersectionObserver' in window && !FINE && !RM) ? new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ var b = e.target.querySelector(':scope > .jm-beam'); if(b) b.classList.add('jm-once'); beamIO.unobserve(e.target); } });
+  }, { threshold: 0.45 }) : null;
+  document.querySelectorAll(CARDS).forEach(function(c){
+    if(c.querySelector(':scope > .jm-beam')) return;
+    if(getComputedStyle(c).position === 'static') c.style.position = 'relative';
+    var b = document.createElement('span'); b.className = 'jm-beam'; b.setAttribute('aria-hidden', 'true'); c.appendChild(b);
+    if(beamIO && !c.matches('.faq-item,.ref-step')) beamIO.observe(c);
+  });
+
+  if(!RM) document.querySelectorAll('.reward-icon,.hub-icon-wrap,.tier-icon,.how-icon-wrap,.social-icon,.bonus-icon,.rh-icon,.rg-icon').forEach(function(el, i){
+    if(getComputedStyle(el).animationName !== 'none') return;
+    el.classList.add('jm-bob'); el.style.setProperty('--jm-bd', (-(i % 7) * 0.65) + 's');
+  });
+
+  /* amounts count up the first time they scroll into view (only simple single numbers) */
+  var NUM = /^(\D*?)(\d[\d,]*(?:\.\d+)?)(\D*)$/;
+  var cntIO = ('IntersectionObserver' in window && !RM) ? new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting) return; cntIO.unobserve(e.target);
+      var el = e.target, orig = el.getAttribute('data-jm-orig'), m = orig.match(NUM); if(!m) return;
+      var to = parseFloat(m[2].replace(/,/g, '')), dec = (m[2].split('.')[1] || '').length, comma = m[2].indexOf(',') > -1, t0 = performance.now(), dur = 1500;
+      (function step(now){
+        var k = Math.min(1, (now - t0) / dur), v = to * (1 - Math.pow(1 - k, 4));
+        var txt = dec ? v.toFixed(dec) : String(Math.round(v)); if(comma) txt = Number(txt).toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+        el.textContent = k < 1 ? m[1] + txt + m[3] : orig;
+        if(k < 1) requestAnimationFrame(step); else { el.classList.add('jm-counted'); }
+      })(t0);
+    });
+  }, { threshold: 0.6 }) : null;
+  if(cntIO) document.querySelectorAll('.rh-stat b,.rh-art-big,.reward-amount,.tier-reward,.tc-reward,.rg-val,.bonus-amount-badge,.paid-counter-static').forEach(function(el){
+    if(el.children.length) return;
+    var t = el.textContent.trim(); if(!NUM.test(t)) return;
+    el.setAttribute('data-jm-orig', t); cntIO.observe(el);
+  });
+
+  function dustShadows(n, w, h){
+    var out = [];
+    for(var k = 0; k < n; k++){
+      var x = Math.round(Math.random() * w), y = Math.round(Math.random() * h), a = (0.18 + Math.random() * 0.45).toFixed(2), sp = Math.random() < 0.3 ? 1 : 0;
+      var col = Math.random() < 0.8 ? 'rgba(252,194,0,' + a + ')' : 'rgba(255,240,200,' + a + ')';
+      out.push(x + 'px ' + y + 'px 0 ' + sp + 'px ' + col, x + 'px ' + (y + h) + 'px 0 ' + sp + 'px ' + col);
+    }
+    return out.join(',');
+  }
+  var dustIO = ('IntersectionObserver' in window) ? new IntersectionObserver(function(es){ es.forEach(function(e){ e.target.classList.toggle('jm-off', !e.isIntersecting); }); }, { rootMargin: '100px 0px' }) : null;
+  if(!RM) document.querySelectorAll('.rewards-section,.how-section,.faq-section,.socials-section,.lb-preview-section,.page-hero,.vip-rules-section,.lb-wrap,.refer-wrap,.hub-grid,.bonus-grid').forEach(function(sec){
+    sec.classList.add('jm-dusty');
+    var d = document.createElement('div'); d.className = 'jm-dust'; d.setAttribute('aria-hidden', 'true');
+    var w = Math.max(1600, sec.offsetWidth);
+    d.innerHTML = '<i style="box-shadow:' + dustShadows(26, w, 1200) + '"></i><i style="box-shadow:' + dustShadows(16, w, 1200) + '"></i>';
+    sec.insertBefore(d, sec.firstChild);
+    if(dustIO) dustIO.observe(sec);
+  });
+
+  /* leaderboard rows slide in as the table renders */
+  var lbBody = document.getElementById('lb-body');
+  if(lbBody && 'MutationObserver' in window && !RM){
+    new MutationObserver(function(){
+      var i = 0;
+      lbBody.querySelectorAll('tr.lb-row:not(.jm-row-done)').forEach(function(tr){
+        tr.classList.add('jm-row-done');
+        if(i < 24){ tr.classList.add('jm-row'); tr.style.setProperty('--jm-i', i); }
+        i++;
+      });
+    }).observe(lbBody, { childList: true });
+  }
+
+  /* reading progress bar on pages that didn't have one */
+  var sbar = document.getElementById('scroll-bar');
+  if(!sbar){ sbar = document.createElement('div'); sbar.id = 'scroll-bar'; sbar.style.cssText = 'position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,#FCC200,#ff9d2f,#00d4ff);z-index:9999;box-shadow:0 0 10px rgba(252,194,0,.6);pointer-events:none'; document.body.appendChild(sbar); sbar._jm = 1; }
 
   /* ---------- 4 + 6. one scroll/animation loop ---------- */
   var nav = document.querySelector('.nav');
@@ -194,6 +266,7 @@
     if(RM) return;
     if(Math.abs(dy) > 0.05 || !tick.i){
       tick.i = 1;
+      if(sbar && sbar._jm){ var tot = (document.documentElement.scrollHeight - vh) || 1; sbar.style.width = Math.min(100, y / tot * 100) + '%'; }
       pars.forEach(function(el){ if(y < vh * 1.5) el.style.translate = '0 ' + (y * parseFloat(el.getAttribute('data-jm-par'))).toFixed(1) + 'px'; });
       if(heroContent && y < vh * 1.3){
         var k = Math.min(1, y / (vh * 0.85));
@@ -239,7 +312,7 @@
   }
   function state(el, kind){ if(!el._jm){ el._jm = { el: el, kind: kind, cx: 0, cy: 0, tx: 0, ty: 0, on: true }; active.push(el._jm); } el._jm.on = true; return el._jm; }
   if(FINE && !RM){
-    var TILT = '.reward-card,.hub-card,.tier-card,.bonus-card,.social-card,.lb-pool-card,.refer-hero-card,.rg-card,.how-step,.hs-card';
+    var TILT = '.rh-card,.reward-card,.hub-card,.tier-card,.bonus-card,.social-card,.lb-pool-card,.refer-hero-card,.rg-card,.how-step,.hs-card';
     var MAG = '.btn-primary,.btn-ghost,.nav-cta,.code-copy-btn,.asb-cta,.stream-watch-btn';
     document.querySelectorAll(TILT).forEach(function(c){ if(c.parentNode) c.parentNode.style.perspective = '1100px'; });
     document.addEventListener('pointermove', function(e){

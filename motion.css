@@ -102,3 +102,88 @@ html.jm-leaving #jm-veil{animation:jmVeilIn .3s ease forwards}
   .jm-rv,.jm-w>.jm-wi,.page-hero .jm-hin,.hero .jm-hin{opacity:1!important;translate:none!important;rotate:none!important;scale:none!important;animation:none!important;transition:none!important}
   .jm-aurora i,.hero-accent.jm-wi,.hero-accent .jm-wi,.jm-gold{animation:none!important}
 }
+
+/* =====================================================================
+   POLISH LAYER — every card, section and page
+===================================================================== */
+@property --jm-a{syntax:'<angle>';inherits:false;initial-value:0deg}
+
+/* animated light that runs around a card's border (hover on desktop, once on reveal on phones) */
+.jm-beam{position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;z-index:4;
+  background:conic-gradient(from var(--jm-a),transparent 0 58%,rgba(var(--jm-bc,252,194,0),0) 60%,rgba(var(--jm-bc,252,194,0),.95) 74%,#fff8d6 76%,rgba(var(--jm-bc,252,194,0),.9) 78%,rgba(var(--jm-bc,252,194,0),0) 90%,transparent 100%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);
+  opacity:0;transition:opacity .5s}
+@media (hover:hover){ *:hover>.jm-beam{opacity:1;animation:jmBeam 2.4s linear infinite} }
+.jm-beam.jm-once{animation:jmBeamOnce 1.8s var(--jm-ease) .2s both}
+@keyframes jmBeam{to{--jm-a:360deg}}
+@keyframes jmBeamOnce{0%{opacity:0;--jm-a:0deg}15%{opacity:1}80%{opacity:1}100%{opacity:0;--jm-a:360deg}}
+.rc-cyan,.bonus-card.giveaway,.tier-card.diamond,.tier-card.t-plat{--jm-bc:0,212,255}
+.rc-purple,.tier-card.obsidian,.refer-hero-card.purple{--jm-bc:176,107,255}
+.bonus-card.deposit-match{--jm-bc:0,220,110}
+.social-card.discord{--jm-bc:88,101,242}.social-card.kick{--jm-bc:83,252,24}.social-card.youtube{--jm-bc:255,40,40}
+.tier-card.silver,.tier-card.plat{--jm-bc:210,225,240}.tier-card.bronze,.tier-card.t-bronze{--jm-bc:232,162,74}
+
+/* icons float gently */
+.jm-bob{animation:jmBob 4.6s ease-in-out infinite;animation-delay:var(--jm-bd,0s)}
+@keyframes jmBob{0%,100%{translate:0 0}50%{translate:0 -6px}}
+
+/* drifting gold dust behind sections */
+.jm-dusty{position:relative;isolation:isolate}
+.jm-dust{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none}
+.jm-dust i{position:absolute;left:0;top:0;width:2px;height:2px;border-radius:50%;background:transparent;animation:jmDust 60s linear infinite}
+.jm-dust i:nth-child(2){animation-duration:90s;opacity:.6}
+@keyframes jmDust{from{transform:translateY(0)}to{transform:translateY(-1200px)}}
+.jm-off .jm-dust i,.jm-off.jm-dust i{animation-play-state:paused}
+
+/* leaderboard rows slide in */
+.jm-row{animation:jmRow .7s var(--jm-ease) calc(var(--jm-i,0) * 40ms) both}
+@keyframes jmRow{from{opacity:0;translate:-22px 0}}
+.lb-row td{transition:background .25s}
+
+/* FAQ: open item glows */
+.faq-item.open{box-shadow:0 0 0 1px rgba(252,194,0,.22),0 22px 44px -26px rgba(252,194,0,.45)}
+.faq-q .faq-chev{transition:transform .45s var(--jm-ease),color .3s}
+
+/* footer: shimmering gold top edge, links slide */
+.footer{position:relative}
+.footer::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;background:linear-gradient(90deg,transparent,rgba(252,194,0,.7),#fff3c2,rgba(252,194,0,.7),transparent);background-size:50% 100%;background-repeat:no-repeat;animation:jmEdge 6s ease-in-out infinite}
+@keyframes jmEdge{0%{background-position:-60% 0}100%{background-position:160% 0}}
+.footer-col a{transition:color .25s,translate .35s var(--jm-ease)}
+.footer-col a:hover{color:#FCC200;translate:5px 0}
+.footer-socials a:hover{box-shadow:0 8px 20px -8px rgba(252,194,0,.5)}
+
+/* numbers: soft gold flash when they finish counting */
+.jm-counted{animation:jmNumPop .6s var(--jm-ease)}
+@keyframes jmNumPop{40%{scale:1.06}}
+
+/* legal pages: content sits on a glass card with gold section markers */
+.legal-wrap{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.028),rgba(255,255,255,.008));border:1px solid rgba(255,255,255,.07);border-radius:22px;padding:2.6rem 2.8rem 2.2rem!important;margin-bottom:5rem!important;box-shadow:0 40px 80px -50px rgba(0,0,0,.9)}
+.legal-wrap h2{position:relative;padding-left:1rem}
+.legal-wrap h2::before{content:"";position:absolute;left:0;top:.2em;bottom:.2em;width:3px;border-radius:3px;background:linear-gradient(180deg,#FFD740,#FCC200 60%,rgba(252,194,0,.2))}
+.legal-wrap a{transition:color .2s}
+@media (max-width:600px){.legal-wrap{padding:1.6rem 1.2rem 1.4rem!important;border-radius:18px;margin:0 .8rem 4rem!important}}
+
+/* refer steps: number badges pop in */
+.ref-step.jm-in .ref-step-num{animation:jmPop .7s cubic-bezier(.2,1.6,.4,1) .15s both}
+@keyframes jmPop{from{scale:.3;opacity:0}}
+
+/* mobile bottom nav: active item gets a glowing pill */
+@media (max-width:560px){
+  .mbn-item{position:relative}
+  .mbn-item.active::before{content:"";position:absolute;top:2px;left:50%;width:28px;height:3px;margin-left:-14px;border-radius:3px;background:#FCC200;box-shadow:0 0 10px rgba(252,194,0,.8);animation:jmPop .5s var(--jm-ease) both}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .jm-beam,.jm-bob,.jm-dust,.jm-row,.footer::before{animation:none!important}
+  .jm-dust{display:none}
+}
+
+/* rank-up page: tiers sit 2-up on phones instead of one very long column */
+@media (max-width:560px){
+  .tiers-grid{grid-template-columns:1fr 1fr!important;gap:.7rem!important}
+  .tier-card{padding:1.3rem .6rem 1.1rem!important}
+  .tier-icon{height:44px!important;margin-bottom:.7rem!important}
+  .tier-name{font-size:.62rem!important;letter-spacing:1px!important}
+  .tier-reward,.tier-card.diamond .tier-reward,.tier-card.obsidian .tier-reward{font-size:1.45rem!important}
+  .tier-card.obsidian{grid-column:1/-1}
+}
