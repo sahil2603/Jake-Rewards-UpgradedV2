@@ -128,14 +128,14 @@
     p.z = rnd(0.55, 1.15);
     p.x0 = rnd(0.03, 0.97) * W; p.y = initial ? rnd(-H * 0.2, H) : rnd(-260, -90);
     p.vy = rnd(38, 70) * p.z; p.amp = rnd(24, 70); p.f = rnd(0.35, 0.8); p.ph = rnd(0, 6.28);
-    p.spin = rnd(80, 220) * (Math.random() < 0.5 ? -1 : 1); p.ry = rnd(0, 360); p.rz0 = rnd(-30, 30);
+    p.spin = rnd(40, 110) * (Math.random() < 0.5 ? -1 : 1); p.ry = rnd(0, 360); p.rz0 = rnd(-30, 30);
     p.pushX = 0; p.vx = 0;
     p.el.style.opacity = ((0.35 + (p.z - 0.55) * 0.9) * (MOBILE ? 0.55 : 1)).toFixed(2);
     p.el.style.zIndex = p.z > 0.9 ? 2 : 0;
   }
   function buildPieces(){
     layer.innerHTML = ''; pieces = [];
-    var nCards = MOBILE ? 5 : 8, nChips = MOBILE ? 2 : 3;
+    var nCards = MOBILE ? 5 : 9, nChips = 0; /* chips removed on request */
     for(var i = 0; i < nCards + nChips; i++){
       var el = document.createElement('div');
       if(i < nCards){ el.className = 'jm-card'; el.innerHTML = cardHTML(i); }
@@ -259,16 +259,10 @@
     var t = now / 1000;
     for(var pi = 0; pi < pieces.length; pi++){
       var c = pieces[pi];
-      c.y += c.vy * dt * (1 + (wind - 1.6) * 0.05);
+      c.y += c.vy * dt;
       c.ry += c.spin * dt;
       var sway = Math.sin(t * c.f * 6.283 + c.ph);
-      /* mouse wind pushes nearby cards away */
-      if(mouse.x > -999 && now - mouse.t < 200){
-        var cx = c.x0 + c.pushX + sway * c.amp, dxm = cx - mouse.x, dym = c.y - mouse.y, dm = Math.hypot(dxm, dym);
-        if(dm < 170){ c.vx += (dxm / (dm || 1)) * (170 - dm) * 0.06 + mouse.vx * 0.04; c.spin += mouse.vx * 0.8; }
-      }
-      c.pushX += c.vx * dt * 60; c.vx *= Math.pow(0.92, k60); c.spin += ((c.spin > 0 ? 150 : -150) - c.spin) * 0.01 * k60;
-      var x = c.x0 + c.pushX + sway * c.amp + (wind - 1.6) * 20;
+      var x = c.x0 + sway * c.amp;
       var rz = c.rz0 + sway * 28, rx = Math.cos(t * c.f * 6.283 + c.ph) * 35;
       c.el.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + c.y.toFixed(1) + 'px,0) scale(' + c.z.toFixed(2) + ') rotateZ(' + rz.toFixed(1) + 'deg) rotateX(' + rx.toFixed(1) + 'deg) rotateY(' + (c.chip ? c.ry * 1.6 : c.ry).toFixed(1) + 'deg)';
       if(c.y > H + 120) spawnPiece(c, false);
