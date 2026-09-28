@@ -97,7 +97,7 @@
   </style>
 <style>
 /* ===== Rank-Up v2: climb rail + tier polish ===== */
-.jm-rail{position:relative;max-width:1100px;margin:0 auto 2.4rem;padding:1.6rem 2rem 3.2rem;border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.008));border:1px solid rgba(255,255,255,.07)}
+.jm-rail{position:relative;max-width:1100px;margin:0 auto 2.4rem;padding:1.6rem 2rem 1.5rem;border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.008));border:1px solid rgba(255,255,255,.07)}
 .jm-rail-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:1.3rem;font:800 .62rem var(--font-head);letter-spacing:2.4px;text-transform:uppercase;color:var(--gold)}
 .jm-rail-head span{color:var(--muted);letter-spacing:1.2px}
 .jm-rail-track{position:relative;height:4px;margin:0 9px;border-radius:4px;background:rgba(255,255,255,.08)}
@@ -114,9 +114,10 @@
 .jm-node:hover .jm-node-tip,.jm-node:focus-visible .jm-node-tip{opacity:1;translate:-50% 0}
 .jm-node-tip.r{left:auto;right:-6px;translate:0 6px}.jm-node-tip.l{left:-6px;translate:0 6px}
 .jm-node:hover .jm-node-tip.r,.jm-node:hover .jm-node-tip.l,.jm-node:focus-visible .jm-node-tip.r,.jm-node:focus-visible .jm-node-tip.l{translate:0 0}
-.jm-rail-labels{position:absolute;left:0;right:0;top:22px}
-.jm-rail-labels span.lo{top:17px}
-.jm-rail-labels span{position:absolute;top:0;translate:-50% 0;font:800 .58rem var(--font-head);letter-spacing:1.3px;text-transform:uppercase;white-space:nowrap}
+
+.jm-rail-labels{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.6rem 1rem;margin-top:1.5rem;padding:0 2px}
+.jm-rail-labels span{display:inline-flex;align-items:center;gap:.45rem;font:800 .6rem var(--font-head);letter-spacing:1.4px;text-transform:uppercase;color:var(--lc)}
+.jm-rail-labels span::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--lc);box-shadow:0 0 8px var(--lc)}
 .tier-card.jm-flash{animation:jmFlash 1.4s ease}
 @keyframes jmFlash{25%{box-shadow:0 0 0 2px rgba(252,194,0,.9),0 0 40px rgba(252,194,0,.5)}}
 /* icons turn in 3D on hover; the top tier gets a permanent light ring + ribbon */
@@ -130,11 +131,9 @@
   .jm-rail-track{margin:0 7px}
   .jm-node{width:12px;height:12px;margin:-6px 0 0 -6px;border-width:1.5px}
   .jm-node.top{width:18px;height:18px;margin:-9px 0 0 -9px}
-  .jm-rail-labels span{font-size:.45rem;letter-spacing:.6px}
+  .jm-rail-labels{justify-content:center;gap:.5rem .9rem;margin-top:1.2rem}.jm-rail-labels span{font-size:.5rem;letter-spacing:.8px}
   .jm-rail-head{font-size:.55rem;letter-spacing:1.6px}
   .jm-rail-head span{display:none}
-  .jm-rail-labels span.lo{top:0}
-  .jm-rail-labels .k-silver,.jm-rail-labels .k-gold,.jm-rail-labels .k-plat,.jm-rail-labels .k-diamond{display:none}
 }
 @media (prefers-reduced-motion:reduce){.jm-rail-fill{transform:none}.jm-node{scale:1;opacity:1}.jm-node.top{animation:none}}
 </style>
@@ -146,7 +145,7 @@
     var cards=[].slice.call(grid.querySelectorAll('.tier-card')); if(!cards.length) return;
     var COL={bronze:'#e8a24a',silver:'#d8e4f0',gold:'#FCC200',plat:'#20c0d8',diamond:'#96dcff',obsidian:'#b06bff'};
     var rail=document.createElement('div'); rail.className='jm-rail';
-    rail.innerHTML='<div class="jm-rail-head">Your climb<span>Tap a step to jump to it</span></div><div class="jm-rail-track"><div class="jm-rail-fill"></div><div class="jm-rail-nodes"></div><div class="jm-rail-labels"></div></div>';
+    rail.innerHTML='<div class="jm-rail-head">Your climb<span>Tap a step to jump to it</span></div><div class="jm-rail-track"><div class="jm-rail-fill"></div><div class="jm-rail-nodes"></div></div><div class="jm-rail-labels"></div>';
     var nodes=rail.querySelector('.jm-rail-nodes'), labels=rail.querySelector('.jm-rail-labels'), seen={};
     cards.forEach(function(c,i){
       var kind=['bronze','silver','gold','plat','diamond','obsidian'].filter(function(k){return c.classList.contains(k);})[0]||'gold';
@@ -161,7 +160,7 @@
         c.classList.remove('jm-flash'); void c.offsetWidth; c.classList.add('jm-flash');
       });
       nodes.appendChild(n);
-      if(!seen[kind]){ seen[kind]=1; var l=document.createElement('span'); l.className='k-'+kind; l.textContent={bronze:'Bronze',silver:'Silver',gold:'Gold',plat:'Platinum',diamond:'Diamond',obsidian:'Obsidian'}[kind]; l.style.left=pct+'%'; l.style.color=COL[kind]; if(pct===0) l.style.translate='0 0'; if(pct===100) l.style.translate='-100% 0'; if(labels.children.length%2) l.classList.add('lo');  labels.appendChild(l); }
+      if(!seen[kind]){ seen[kind]=1; var l=document.createElement('span'); l.className='k-'+kind; l.style.setProperty('--lc',COL[kind]); l.textContent={bronze:'Bronze',silver:'Silver',gold:'Gold',plat:'Platinum',diamond:'Diamond',obsidian:'Obsidian'}[kind]; labels.appendChild(l); }
     });
     grid.parentNode.insertBefore(rail,grid);
     var ob=grid.querySelector('.tier-card.obsidian'); if(ob){ var r=document.createElement('span'); r.className='jm-ribbon'; r.textContent='Top tier'; ob.appendChild(r); }

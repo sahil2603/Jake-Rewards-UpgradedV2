@@ -81,7 +81,13 @@
 .hm-cue{position:absolute;left:50%;bottom:22px;z-index:3;width:26px;height:42px;margin-left:-13px;border-radius:14px;border:1.5px solid rgba(252,194,0,.45);background:none;cursor:pointer;padding:0}
 .hm-cue::after{content:"";position:absolute;left:50%;top:8px;width:4px;height:8px;margin-left:-2px;border-radius:3px;background:#FCC200;animation:hmWheel 2s cubic-bezier(.16,1,.3,1) infinite}
 @keyframes hmWheel{0%{opacity:0;translate:0 -3px}30%{opacity:1}100%{opacity:0;translate:0 14px}}
-/* live wins: glass chips */
+/* live race: glass chips */
+a.wins-ticker-tag,a.win-pill{text-decoration:none}
+.win-pill{transition:border-color .3s,background .3s}
+a.win-pill:hover{border-color:rgba(252,194,0,.35);background:rgba(252,194,0,.06)}
+.win-pill.race-hl{border-color:rgba(252,194,0,.28);background:linear-gradient(110deg,rgba(252,194,0,.1),rgba(255,255,255,.02))}
+.race-rank{font-family:var(--font-display);font-size:1.15rem;letter-spacing:1px;color:#FCC200;line-height:1}
+.race-ico{font-size:.9rem;line-height:1}
 .win-pill{padding:.42rem .95rem;border-radius:999px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07)}
 .win-amt{text-shadow:0 0 12px rgba(252,194,0,.45)}
 .wins-ticker-tag .live-dot{box-shadow:0 0 0 0 rgba(0,255,136,.6);animation:hmPing 1.6s infinite}
@@ -284,9 +290,9 @@
 </div>
 </section>
 
-<!-- LIVE WINS TICKER -->
-<div class="wins-ticker" aria-label="Recent community wins">
-  <div class="wins-ticker-tag"><span class="live-dot"></span> LIVE WINS</div>
+<!-- LIVE RACE TICKER (real leaderboard data) -->
+<div class="wins-ticker" aria-label="Live leaderboard race">
+  <a class="wins-ticker-tag" href="leaderboard.html"><span class="live-dot"></span> LIVE RACE</a>
   <div class="wins-track-wrap"><div class="wins-track" id="wins-track"></div></div>
 </div>
 
@@ -648,6 +654,7 @@ async function loadHomeLiveSheet(){
     })).filter(r=>r.wagered>0).sort((a,b)=>a.rank-b.rank);
     if(live.length>0){
       window._homeLiveData=live;
+      if(window.jmRace) window.jmRace(live);
       document.getElementById('home-podium').innerHTML='';
       initHomePodium();
     }
@@ -658,25 +665,46 @@ async function loadHomeLiveSheet(){
 // Load live sheet on page load
 if(document.readyState==='complete'){loadHomeLiveSheet();}
 else{window.addEventListener('load',loadHomeLiveSheet,{once:true});}
-// Wins ticker — hardcoded community wins
+// Live race ticker — built from Jake's real leaderboard sheet (no made-up wins)
 (function(){
   const track=document.getElementById('wins-track');
   if(!track) return;
-  const wins=[
-    {user:'CryptoKing',amount:22000,game:'Stake Originals'},{user:'WagerWolf',amount:12000,game:'Slots'},
-    {user:'MoonGrinder',amount:8000,game:'Live Casino'},{user:'SlotSensei',amount:6000,game:'Pragmatic Play'},
-    {user:'DiamondHands',amount:5000,game:'Stake Originals'},{user:'NightRider',amount:4000,game:'Blackjack'},
-    {user:'LuckyCrypto',amount:3500,game:'Roulette'},{user:'HighRoller99',amount:3000,game:'Slots'},
-    {user:'BetKing',amount:2500,game:'Baccarat'},{user:'GoldRush',amount:2000,game:'Stake Dice'},
-    {user:'SpinMaster',amount:1700,game:'Book of Dead'},{user:'CasinoAce',amount:1500,game:'Blackjack'},
-    {user:'RollTheDice',amount:1400,game:'Plinko'},{user:'JackpotJoe',amount:1200,game:'Slots'},
-    {user:'BetBlitz',amount:1200,game:'Live Dealer'},{user:'WinStreak',amount:900,game:'Roulette'},
-    {user:'StackStar',amount:750,game:'Stake Originals'},{user:'FullSend',amount:600,game:'Slots'},
-    {user:'NovaBet',amount:500,game:'Crash'},{user:'PurpleAce',amount:450,game:'Baccarat'}
-  ];
-  const make=w=>'<div class="win-pill"><span class="win-dot"></span><span class="win-user">'+w.user+'</span> won <span class="win-amt">$'+w.amount.toLocaleString()+'</span> on <span class="win-game">'+w.game+'</span></div>';
-  const html=wins.map(make).join('');
-  track.innerHTML=html+html;
+  const PRIZE=[20000,10000,5000,4000,3500,3000,2500,2250,2000,1650,1400,1300,1250,1200,1100];
+  function nextReset(){ // 10:00 AM New York time, last day of the month (same rule as leaderboard page)
+    function at(y,m){const last=new Date(Date.UTC(y,m+1,0)).getUTCDate();const g=Date.UTC(y,m,last,10,0,0);
+      const f=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour12:false,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'}).formatToParts(new Date(g));
+      const v=t=>parseInt(f.find(x=>x.type===t).value,10);const z=Date.UTC(v('year'),v('month')-1,v('day'),v('hour')%24,v('minute'),v('second'));return g-(z-g);}
+    const n=new Date();let e=at(n.getUTCFullYear(),n.getUTCMonth());if(Date.now()>=e)e=at(n.getUTCFullYear(),n.getUTCMonth()+1);return e;}
+  function left(){const d=Math.max(0,nextReset()-Date.now());return Math.floor(d/864e5)+'d '+Math.floor(d%864e5/36e5)+'h '+Math.floor(d%36e5/6e4)+'m';}
+  const money=n=>'$'+Math.round(n).toLocaleString();
+  const pill=(inner,cls)=>'<a class="win-pill '+(cls||'')+'" href="leaderboard.html">'+inner+'</a>';
+  function build(data){
+    const out=[];
+    out.push(pill('<span class="race-ico">⏱</span>Race ends in <span class="win-amt jm-race-left">'+left()+'</span>','race-hl'));
+    if(data&&data.length){
+      const total=data.reduce((a,r)=>a+r.wagered,0);
+      out.push(pill('<span class="race-ico">🔥</span><span class="win-amt">'+money(total)+'</span> wagered this month'));
+      out.push(pill('<span class="race-ico">👥</span><span class="win-user">'+data.length+'</span> players racing for <span class="win-amt">$75,000</span>'));
+      data.slice(0,15).forEach((r,i)=>{
+        let x='<span class="race-rank">#'+(i+1)+'</span><span class="win-user">'+_maskUser(r.user)+'</span><span class="win-game">'+money(r.wagered)+' wagered</span>';
+        if(PRIZE[i]) x+='<span class="win-game">→</span><span class="win-amt">'+money(PRIZE[i])+'</span>';
+        out.push(pill(x));
+        if(i===0&&data[1]) out.push(pill('<span class="race-ico">⚔️</span>#2 is <span class="win-amt">'+money(data[0].wagered-data[1].wagered)+'</span> behind first place'));
+        if(i===9&&data[10]) out.push(pill('<span class="race-ico">🎯</span><span class="win-amt">'+money(data[9].wagered-data[10].wagered)+'</span> separates #10 and #11'));
+      });
+    }else{
+      out.push(pill('<span class="race-ico">🏆</span><span class="win-amt">$75,000</span> monthly leaderboard'));
+      out.push(pill('<span class="race-ico">🎁</span><span class="win-amt">$500</span> daily giveaway'));
+      out.push(pill('<span class="race-ico">⚡</span>Use code <span class="win-amt">JAKE</span> to join the race'));
+    }
+    out.push(pill('<span class="race-ico">⚡</span>Wager under code <span class="win-amt">JAKE</span> to climb the board','race-hl'));
+    const html=out.join('');
+    track.innerHTML=html+html;
+    requestAnimationFrame(()=>{track.style.animationDuration=Math.max(40,track.scrollWidth/2/55)+'s';});
+  }
+  window.jmRace=build;
+  build(window._homeLiveData||null);
+  setInterval(()=>{if(document.hidden)return;const t=left();track.querySelectorAll('.jm-race-left').forEach(e=>e.textContent=t);},30000);
 })();
 // Total paid counter — wait for deferred data, then set up observer
 function initPaidCounter(){
@@ -1162,7 +1190,7 @@ document.querySelectorAll('.card-rain').forEach(initCardRain);
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
 })();
 </script>
-<script src="storm.js?v=4"></script>
+<script src="storm.js?v=5"></script>
 <script src="motion.js?v=7"></script>
 </body>
 </html>

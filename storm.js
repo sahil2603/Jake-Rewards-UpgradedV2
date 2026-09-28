@@ -127,8 +127,8 @@
   function spawnPiece(p, initial){
     p.z = rnd(0.55, 1.15);
     p.x0 = rnd(0.03, 0.97) * W; p.y = initial ? rnd(-H * 0.2, H) : rnd(-260, -90);
-    p.vy = rnd(38, 70) * p.z; p.amp = rnd(24, 70); p.f = rnd(0.35, 0.8); p.ph = rnd(0, 6.28);
-    p.spin = rnd(40, 110) * (Math.random() < 0.5 ? -1 : 1); p.ry = rnd(0, 360); p.rz0 = rnd(-30, 30);
+    p.vy = rnd(30, 52) * p.z; p.amp = rnd(5, 12); p.f = rnd(0.1, 0.2); p.ph = rnd(0, 6.28);
+    p.spin = rnd(22, 55) * (Math.random() < 0.5 ? -1 : 1); p.ry = rnd(0, 360); p.rz0 = rnd(-30, 30);
     p.pushX = 0; p.vx = 0;
     p.el.style.opacity = ((0.35 + (p.z - 0.55) * 0.9) * (MOBILE ? 0.55 : 1)).toFixed(2);
     p.el.style.zIndex = p.z > 0.9 ? 2 : 0;
@@ -263,7 +263,7 @@
       c.ry += c.spin * dt;
       var sway = Math.sin(t * c.f * 6.283 + c.ph);
       var x = c.x0 + sway * c.amp;
-      var rz = c.rz0 + sway * 28, rx = Math.cos(t * c.f * 6.283 + c.ph) * 35;
+      var rz = c.rz0 + sway * 9, rx = Math.cos(t * c.f * 6.283 + c.ph) * 12;
       c.el.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + c.y.toFixed(1) + 'px,0) scale(' + c.z.toFixed(2) + ') rotateZ(' + rz.toFixed(1) + 'deg) rotateX(' + rx.toFixed(1) + 'deg) rotateY(' + (c.chip ? c.ry * 1.6 : c.ry).toFixed(1) + 'deg)';
       if(c.y > H + 120) spawnPiece(c, false);
     }
