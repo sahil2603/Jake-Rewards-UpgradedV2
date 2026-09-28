@@ -32,7 +32,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
   <noscript><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/></noscript>
   <link rel="stylesheet" href="style.css"/>
-  <link rel="stylesheet" href="motion.css?v=5"/>
+  <link rel="stylesheet" href="motion.css?v=6"/>
 <style>
 @keyframes badgeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
 @keyframes shimmerLine{0%{left:-100%}100%{left:100%}}
@@ -61,6 +61,58 @@
 @media(max-width:560px){
   .hero-givenaway{font-size:.82rem;letter-spacing:1px;padding:.45rem .9rem;}
 }
+</style>
+<style>
+/* ===== Home v3 polish (content unchanged) ===== */
+/* code card: a light runs around its edge */
+.hero-code-card{isolation:isolate}
+.hero-code-card::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;background:conic-gradient(from var(--jm-a),transparent 0 60%,rgba(252,194,0,.9) 75%,#fff4c4 78%,rgba(252,194,0,.9) 81%,transparent 95%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);animation:jmBeam 4s linear infinite;pointer-events:none;z-index:2}
+.code-card-value{display:inline-flex}
+.code-card-value .ck{display:inline-block;animation:hmLetter 3.6s ease-in-out infinite;animation-delay:calc(var(--k) * .12s)}
+@keyframes hmLetter{0%,70%,100%{translate:0 0;text-shadow:0 0 20px rgba(252,194,0,.4)}78%{translate:0 -4px;text-shadow:0 0 26px rgba(255,230,120,.95)}86%{translate:0 0}}
+/* stats: glowing top edge + hover */
+.hero-stats{position:relative}
+.hero-stats::before{content:"";position:absolute;left:12%;right:12%;top:-1px;height:1px;background:linear-gradient(90deg,transparent,rgba(252,194,0,.8),transparent);background-size:200% 100%;animation:jmEdge 5s ease-in-out infinite}
+.stat{transition:translate .4s cubic-bezier(.16,1,.3,1)}
+.stat:hover{translate:0 -3px}
+/* hero depth + scroll cue */
+.hero-content{perspective:1000px}
+.hero-title{transition:rotate .8s cubic-bezier(.16,1,.3,1)}
+.hero-orb{transition:translate 1.2s cubic-bezier(.16,1,.3,1)}
+.hm-cue{position:absolute;left:50%;bottom:22px;z-index:3;width:26px;height:42px;margin-left:-13px;border-radius:14px;border:1.5px solid rgba(252,194,0,.45);background:none;cursor:pointer;padding:0}
+.hm-cue::after{content:"";position:absolute;left:50%;top:8px;width:4px;height:8px;margin-left:-2px;border-radius:3px;background:#FCC200;animation:hmWheel 2s cubic-bezier(.16,1,.3,1) infinite}
+@keyframes hmWheel{0%{opacity:0;translate:0 -3px}30%{opacity:1}100%{opacity:0;translate:0 14px}}
+/* live wins: glass chips */
+.win-pill{padding:.42rem .95rem;border-radius:999px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07)}
+.win-amt{text-shadow:0 0 12px rgba(252,194,0,.45)}
+.wins-ticker-tag .live-dot{box-shadow:0 0 0 0 rgba(0,255,136,.6);animation:hmPing 1.6s infinite}
+@keyframes hmPing{70%{box-shadow:0 0 0 8px rgba(0,255,136,0)}100%{box-shadow:0 0 0 0 rgba(0,255,136,0)}}
+/* reward cards: outline number */
+.hm-num{position:absolute;top:14px;right:18px;z-index:1;font-family:var(--font-display);font-size:2.6rem;line-height:1;letter-spacing:2px;color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.14);transition:color .4s,-webkit-text-stroke-color .4s;pointer-events:none}
+.reward-card:hover .hm-num{color:rgba(252,194,0,.12);-webkit-text-stroke-color:rgba(252,194,0,.5)}
+/* how it works: arrows travel between the steps */
+.hm-arrow{position:absolute;z-index:2;width:28px;height:28px;margin:-14px 0 0 -14px;border-radius:50%;display:grid;place-items:center;background:#0d1117;border:1px solid rgba(252,194,0,.4);box-shadow:0 0 16px rgba(252,194,0,.25);color:#FCC200;font-size:.9rem;pointer-events:none}
+.hm-arrow span{display:block;animation:hmNudge 1.6s ease-in-out infinite}
+@keyframes hmNudge{50%{translate:3px 0}}
+/* stream: rotating light ring */
+.hm-ring{position:absolute;inset:-2px;z-index:1;border-radius:16px;padding:2px;background:conic-gradient(from var(--jm-a),#FCC200,#b06bff,#53FC18,#FCC200);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);animation:jmBeam 6s linear infinite;pointer-events:none;opacity:.85}
+.stream-frame{position:relative;z-index:2}
+/* total paid: pulse rings, sweep, rising coins */
+.paid-inner{isolation:isolate}
+.hm-rings{position:absolute;left:50%;top:50%;width:0;height:0;z-index:-1;pointer-events:none}
+.hm-rings i{position:absolute;left:-150px;top:-150px;width:300px;height:300px;border-radius:50%;border:1px solid rgba(252,194,0,.35);animation:hmRing 4.5s ease-out infinite;opacity:0}
+.hm-rings i:nth-child(2){animation-delay:-1.5s}.hm-rings i:nth-child(3){animation-delay:-3s}
+@keyframes hmRing{0%{scale:.35;opacity:.8}100%{scale:1.9;opacity:0}}
+.paid-counter{background:linear-gradient(100deg,#FCC200 0 40%,#fff3c2 50%,#FCC200 60% 100%);background-size:250% 100%;background-position:100% 0;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:rfShine 5s ease-in-out 2s infinite}
+@keyframes rfShine{0%{background-position:100% 0}35%,100%{background-position:0 0}}
+.hm-coin{position:absolute;z-index:0;bottom:-26px;width:22px;height:22px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3b0,#FCC200 55%,#b88400);box-shadow:0 4px 10px rgba(0,0,0,.4);animation:hmCoin 7s ease-in infinite;pointer-events:none}
+@keyframes hmCoin{0%{transform:translateY(0) rotateY(0);opacity:0}12%{opacity:.85}85%{opacity:.85}100%{transform:translateY(-340px) rotateY(540deg);opacity:0}}
+/* faq answers glide in */
+.faq-item.open .faq-a p{animation:hmFaq .5s cubic-bezier(.16,1,.3,1) both}
+@keyframes hmFaq{from{opacity:0;translate:0 -6px}}
+@media (max-width:900px){.hm-arrow{display:none}}
+@media (max-width:560px){.hm-cue{display:none}.hm-num{font-size:2rem}}
+@media (prefers-reduced-motion:reduce){.hero-code-card::before,.code-card-value .ck,.hero-stats::before,.hm-cue::after,.hm-arrow span,.hm-ring,.hm-rings i,.paid-counter,.hm-coin,.wins-ticker-tag .live-dot{animation:none!important}.hm-rings,.hm-coin{display:none}}
 </style>
 </head>
 <body>
@@ -975,6 +1027,62 @@ document.querySelectorAll('.card-rain').forEach(initCardRain);
   }
 })();
 </script>
-<script src="motion.js?v=5"></script>
+<script>
+/* Home v3: depth on mouse, letters, arrows, rings, coins (visual only; no content changes) */
+(function(){
+  var RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var FINE=window.matchMedia&&matchMedia('(pointer: fine)').matches;
+  function go(){
+    var hero=document.querySelector('.hero');
+    /* JAKE letters on the code card take turns lifting */
+    var cv=document.querySelector('.code-card-value');
+    if(cv && !cv.querySelector('.ck')){ var t=cv.textContent.trim(); cv.setAttribute('aria-label',t); cv.innerHTML=t.split('').map(function(ch,k){return '<span class="ck" style="--k:'+k+'" aria-hidden="true">'+ch+'</span>';}).join(''); }
+    /* scroll cue */
+    if(hero && !hero.querySelector('.hm-cue')){
+      var cue=document.createElement('button'); cue.type='button'; cue.className='hm-cue'; cue.setAttribute('aria-label','Scroll down');
+      cue.onclick=function(){ var t=document.querySelector('.rewards-section'); if(!t) return; if(window.jmLenis) jmLenis.scrollTo(t,{offset:-70,duration:1.4}); else t.scrollIntoView({behavior:'smooth'}); };
+      hero.appendChild(cue);
+    }
+    /* reward cards: 01 02 03 */
+    document.querySelectorAll('.reward-card').forEach(function(c,i){ if(c.querySelector('.hm-num')) return; var n=document.createElement('span'); n.className='hm-num'; n.setAttribute('aria-hidden','true'); n.textContent=('0'+(i+1)); c.appendChild(n); });
+    /* stream ring */
+    var fw=document.querySelector('.stream-frame-wrap'); if(fw && !fw.querySelector('.hm-ring')){ var r=document.createElement('span'); r.className='hm-ring'; r.setAttribute('aria-hidden','true'); fw.appendChild(r); }
+    /* paid band: pulse rings + coins */
+    var pi=document.querySelector('.paid-inner');
+    if(pi && !RM && !pi.querySelector('.hm-rings')){
+      var rg=document.createElement('div'); rg.className='hm-rings'; rg.setAttribute('aria-hidden','true'); rg.innerHTML='<i></i><i></i><i></i>'; pi.insertBefore(rg,pi.firstChild);
+      var band=document.querySelector('.paid-band');
+      [8,22,38,62,78,92].forEach(function(x,k){ var c=document.createElement('span'); c.className='hm-coin'; c.style.left=x+'%'; c.style.animationDelay=(-k*1.15)+'s'; c.style.scale=(0.55+(k%3)*0.2).toFixed(2); band.appendChild(c); });
+    }
+    /* how it works: arrows sit in the gaps between steps (desktop, only when they're on one row) */
+    var hg=document.getElementById('how-grid');
+    function placeArrows(){
+      if(!hg) return;
+      hg.querySelectorAll('.hm-arrow').forEach(function(a){a.remove();});
+      var steps=[].slice.call(hg.querySelectorAll('.how-step')); if(steps.length<2) return;
+      var g=hg.getBoundingClientRect();
+      for(var k=0;k<steps.length-1;k++){
+        var a=steps[k].getBoundingClientRect(), b=steps[k+1].getBoundingClientRect();
+        if(Math.abs(a.top-b.top)>4) continue;
+        var el=document.createElement('span'); el.className='hm-arrow'; el.setAttribute('aria-hidden','true'); el.innerHTML='<span>→</span>';
+        el.style.left=((a.right+b.left)/2-g.left)+'px'; el.style.top=(a.top-g.top+76)+'px'; hg.appendChild(el);
+      }
+    }
+    placeArrows(); window.addEventListener('resize',function(){clearTimeout(placeArrows.t);placeArrows.t=setTimeout(placeArrows,200);});
+    if(document.fonts&&document.fonts.ready) document.fonts.ready.then(placeArrows);
+    /* depth: orbs drift and the headline leans slightly toward the mouse */
+    if(hero && FINE && !RM){
+      var orbs=[].slice.call(hero.querySelectorAll('.hero-orb')), title=hero.querySelector('.hero-title'), q=false, ev=null;
+      hero.addEventListener('pointermove',function(e){ ev=e; if(q) return; q=true; requestAnimationFrame(function(){ q=false; var r=hero.getBoundingClientRect(), nx=(ev.clientX-r.left)/r.width-.5, ny=(ev.clientY-r.top)/r.height-.5;
+        orbs.forEach(function(o,k){ var f=(k+1)*18; o.style.translate=(nx*f).toFixed(1)+'px '+(ny*f).toFixed(1)+'px'; });
+        if(title) title.style.rotate=(-ny).toFixed(3)+' '+nx.toFixed(3)+' 0 '+(Math.hypot(nx,ny)*6).toFixed(2)+'deg';
+      }); });
+      hero.addEventListener('pointerleave',function(){ orbs.forEach(function(o){o.style.translate='';}); if(title) title.style.rotate=''; });
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
+})();
+</script>
+<script src="motion.js?v=6"></script>
 </body>
 </html>
