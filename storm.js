@@ -36,7 +36,7 @@
     for(var i = 0; i < n; i++){
       var x = sr() * w, y = Math.pow(sr(), 1.8) * h * 0.5, r = (0.08 + sr() * 0.14) * Math.max(w, 900 * CS);
       var gr = g.createRadialGradient(x, y, 0, x, y, r);
-      if(lit){ gr.addColorStop(0, 'rgba(200,180,255,0.32)'); gr.addColorStop(0.5, 'rgba(150,120,230,0.1)'); gr.addColorStop(1, 'rgba(120,90,200,0)'); }
+      if(lit){ gr.addColorStop(0, 'rgba(255,228,150,0.30)'); gr.addColorStop(0.5, 'rgba(230,180,70,0.1)'); gr.addColorStop(1, 'rgba(200,150,40,0)'); }
       else   { gr.addColorStop(0, 'rgba(34,38,58,0.55)');  gr.addColorStop(0.55, 'rgba(22,26,42,0.25)'); gr.addColorStop(1, 'rgba(14,16,28,0)'); }
       g.fillStyle = gr; g.beginPath(); g.arc(x, y, r, 0, 6.2832); g.fill();
     }
@@ -49,8 +49,8 @@
 
   /* ---------------- rain ---------------- */
   var LAYERS = MOBILE
-    ? [{ n: 60, len: [8, 14], sp: [9, 12], w: 0.8, a: 0.12 }, { n: 40, len: [14, 22], sp: [13, 17], w: 1, a: 0.2 }, { n: 12, len: [24, 34], sp: [19, 24], w: 1.4, a: 0.32 }]
-    : [{ n: 150, len: [8, 14], sp: [9, 12], w: 0.8, a: 0.1 }, { n: 90, len: [14, 24], sp: [13, 17], w: 1.05, a: 0.18 }, { n: 28, len: [26, 38], sp: [19, 25], w: 1.5, a: 0.3 }];
+    ? [{ n: 55, len: [7, 12], sp: [4.8, 6.4], w: 0.8, a: 0.12 }, { n: 34, len: [12, 18], sp: [7, 9], w: 1, a: 0.2 }, { n: 10, len: [18, 26], sp: [10, 12.5], w: 1.3, a: 0.3 }]
+    : [{ n: 140, len: [7, 12], sp: [6.2, 8.2], w: 0.8, a: 0.1 }, { n: 84, len: [12, 20], sp: [9, 11.8], w: 1.05, a: 0.18 }, { n: 24, len: [22, 32], sp: [13, 17], w: 1.45, a: 0.3 }];
   var drops = [], splashes = [];
   function mkDrop(L, anywhere){
     return { L: L, x: rnd(-W * 0.2, W * 1.1), y: anywhere ? rnd(-H, H) : rnd(-H * 0.3, -20), len: rnd(L.len[0], L.len[1]), sp: rnd(L.sp[0], L.sp[1]), ground: rnd(H * 0.82, H * 1.02) };
@@ -89,7 +89,7 @@
         setTimeout(function(){ accent.classList.remove('jm-zap'); void accent.offsetWidth; accent.classList.add('jm-zap'); }, 60);
       }
     }
-    if(byUser){ hero.classList.remove('jm-shake'); void hero.offsetWidth; hero.classList.add('jm-shake'); }
+    
   }
   function autoStrike(now){
     if(Math.random() < 0.28){ sheet = 1; sheetX = rnd(0.15, 0.85); nextStrike = now + rnd(1800, 4200); return; }
@@ -106,12 +106,12 @@
   function drawBolt(b, k){
     function line(bb, lw, col){ ctx.lineWidth = lw * bb.w; ctx.strokeStyle = col; ctx.beginPath(); ctx.moveTo(bb.pts[0][0], bb.pts[0][1]); for(var i = 1; i < bb.pts.length; i++) ctx.lineTo(bb.pts[i][0], bb.pts[i][1]); ctx.stroke(); bb.kids.forEach(function(c){ line(c, lw, col); }); }
     ctx.save(); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    ctx.shadowColor = 'rgba(176,120,255,0.95)'; ctx.shadowBlur = 26 * k;
-    line(b, 12, 'rgba(150,100,255,' + (0.18 * k) + ')');
-    ctx.shadowBlur = 12 * k;
-    line(b, 4, 'rgba(215,195,255,' + (0.8 * k) + ')');
-    ctx.shadowBlur = 0;
-    line(b, 1.7, 'rgba(255,255,255,' + (0.97 * k) + ')');
+    ctx.shadowColor = 'rgba(255,210,90,0.95)'; ctx.shadowBlur = 30 * k;
+    line(b, 12, 'rgba(252,194,0,' + (0.24 * k) + ')');
+    ctx.shadowBlur = 18 * k;
+    line(b, 4, 'rgba(255,225,130,' + (0.8 * k) + ')');
+    ctx.shadowBlur = 6 * k;
+    line(b, 1.7, 'rgba(255,255,245,' + (0.97 * k) + ')');
     ctx.restore();
   }
 
@@ -153,15 +153,7 @@
     hero.addEventListener('pointerleave', function(){ mouse.x = mouse.y = -9999; });
   }
 
-  /* tap / click the sky to strike */
-  var lastUser = 0;
-  hero.addEventListener('pointerdown', function(e){
-    if(RM || e.button > 0) return;
-    if(e.target.closest('a,button,input,.hero-code-card,.hm-bar,.hero-live-bar')) return;
-    var now = performance.now(); if(now - lastUser < 350) return; lastUser = now;
-    var r = hero.getBoundingClientRect(); strike(e.clientX - r.left, e.clientY - r.top, true);
-  });
-
+  /* tap-to-strike removed on request; lightning is automatic only */
   window.jmStrike = function(x, y){ strike(x, y, true); };
 
   /* ---------------- sizing ---------------- */
@@ -216,7 +208,7 @@
       ctx.globalAlpha = Math.min(1, light); ctx.drawImage(cloudLit, -cloudX, 0, cw, ch);
       var fx = (flash > sheet ? flashX : sheetX) * W;
       var gr = ctx.createRadialGradient(fx, 0, 0, fx, 0, Math.max(W, H) * 0.8);
-      gr.addColorStop(0, 'rgba(190,160,255,' + (0.13 * light) + ')'); gr.addColorStop(1, 'rgba(120,90,220,0)');
+      gr.addColorStop(0, 'rgba(255,225,140,' + (0.13 * light) + ')'); gr.addColorStop(1, 'rgba(220,170,50,0)');
       ctx.globalAlpha = 1; ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H);
     }
     ctx.globalAlpha = 1;

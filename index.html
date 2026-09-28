@@ -18,7 +18,7 @@
   <meta name="keywords" content="jake rewards, stake affiliate code jake, stake leaderboard, stake rank up rewards, stake giveaway, jakerewards"/>
   <meta property="og:title" content="JakeRewards — Most Rewarding Stake Affiliate 2026"/>
   <meta property="og:description" content="$75,000 monthly leaderboard, daily $500 giveaway, rank-up rewards. Use code JAKE on Stake."/>
-  <meta property="og:image" content="https://jakerewards.com/og-image.png?v=10"/>
+  <meta property="og:image" content="https://sahil2603.github.io/Jake-Rewards-UpgradedV2/og-image.png?v=13"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
   <meta property="og:type" content="website"/>
@@ -26,7 +26,7 @@
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="JakeRewards — Most Rewarding Stake Affiliate 2026"/>
   <meta name="twitter:description" content="$75,000 monthly leaderboard, daily $500 giveaway, rank-up rewards. Use code JAKE on Stake."/>
-  <meta name="twitter:image" content="https://jakerewards.com/og-image.png?v=10"/>
+  <meta name="twitter:image" content="https://sahil2603.github.io/Jake-Rewards-UpgradedV2/og-image.png?v=13"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'"/>
@@ -88,6 +88,29 @@ a.win-pill:hover{border-color:rgba(252,194,0,.35);background:rgba(252,194,0,.06)
 .win-pill.race-hl{border-color:rgba(252,194,0,.28);background:linear-gradient(110deg,rgba(252,194,0,.1),rgba(255,255,255,.02))}
 .race-rank{font-family:var(--font-display);font-size:1.15rem;letter-spacing:1px;color:#FCC200;line-height:1}
 .race-ico{font-size:.9rem;line-height:1}
+/* live race v2: brighter, richer */
+.wins-ticker{position:relative;background:linear-gradient(180deg,rgba(252,194,0,.07),rgba(252,194,0,.015) 60%,rgba(0,0,0,0)),var(--bg2)!important;border-top:1px solid rgba(252,194,0,.22)!important;border-bottom:1px solid rgba(252,194,0,.12)!important}
+.wins-ticker::before{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;background:linear-gradient(90deg,transparent,#FCC200 30%,#fff3c2 50%,#FCC200 70%,transparent);opacity:.7;pointer-events:none}
+a.wins-ticker-tag{padding:.45rem .85rem;border-radius:999px;background:rgba(0,255,136,.08);border:1px solid rgba(0,255,136,.35);color:#eafff4;font-size:.7rem;letter-spacing:2px;box-shadow:0 0 18px rgba(0,255,136,.12)}
+.win-pill{color:rgba(255,255,255,.88)!important;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025))!important;border-color:rgba(255,255,255,.13)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.win-pill .win-user{color:#fff}
+.win-pill .win-game{color:rgba(255,255,255,.62)}
+.win-pill .win-amt{color:#FFD23F!important;text-shadow:0 0 14px rgba(252,194,0,.55)}
+.win-pill.race-hl{border-color:rgba(252,194,0,.45)!important;background:linear-gradient(110deg,rgba(252,194,0,.2),rgba(252,194,0,.05))!important}
+.win-pill.r1{border-color:rgba(252,194,0,.5)!important;background:linear-gradient(110deg,rgba(252,194,0,.18),rgba(255,255,255,.03))!important}
+.win-pill.r2{border-color:rgba(214,222,235,.4)!important}
+.win-pill.r3{border-color:rgba(205,127,50,.45)!important}
+.win-pill.r2 .race-rank{color:#dfe6f2}.win-pill.r3 .race-rank{color:#e0954f}
+.wins-track-wrap{-webkit-mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent)!important;mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent)!important}
+@media (max-width:768px){
+  .wins-ticker{padding:.9rem 0 1rem!important;gap:.65rem!important;align-items:center!important}
+  a.wins-ticker-tag{font-size:.66rem;margin:0 auto}
+  .wins-track-wrap{width:100%}
+  .wins-track{gap:.7rem!important}
+  .win-pill{font-size:.9rem!important;padding:.55rem .95rem!important;gap:7px!important}
+  .win-pill .win-game{font-size:.82rem!important}
+  .race-rank{font-size:1.2rem}
+}
 .win-pill{padding:.42rem .95rem;border-radius:999px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07)}
 .win-amt{text-shadow:0 0 12px rgba(252,194,0,.45)}
 .wins-ticker-tag .live-dot{box-shadow:0 0 0 0 rgba(0,255,136,.6);animation:hmPing 1.6s infinite}
@@ -177,11 +200,8 @@ a.win-pill:hover{border-color:rgba(252,194,0,.35);background:rgba(252,194,0,.06)
 .jm-chip{width:38px;height:38px;margin:-19px 0 0 -19px}
 .jm-chip i{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,#2a1a48 0 40%,#FCC200 41% 44%,transparent 45%),repeating-conic-gradient(#FCC200 0 18deg,#1b1430 18deg 45deg);box-shadow:0 0 0 2px #FCC200 inset,0 6px 12px rgba(0,0,0,.5),0 0 14px rgba(252,194,0,.35)}
 .jm-chip.purple i{background:radial-gradient(circle,#1b1430 0 40%,#b06bff 41% 44%,transparent 45%),repeating-conic-gradient(#b06bff 0 18deg,#140c26 18deg 45deg);box-shadow:0 0 0 2px #b06bff inset,0 6px 12px rgba(0,0,0,.5),0 0 14px rgba(176,107,255,.4)}
-.hero.jm-storm{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='4' y='26' font-size='24'>⚡</text></svg>") 14 14,crosshair}
-.hero.jm-storm a,.hero.jm-storm button{cursor:pointer}
 .hero-accent.jm-zap{animation:jmZap .7s ease-out,jmGoldSweep 5s ease-in-out 1.6s infinite}
 @keyframes jmZap{0%{filter:brightness(2.6) drop-shadow(0 0 22px #fff6c8)}30%{filter:brightness(1.4) drop-shadow(0 0 14px rgba(252,194,0,.9))}55%{filter:brightness(2) drop-shadow(0 0 18px #fff6c8)}100%{filter:none}}
-.hero.jm-shake .hero-content{animation:jmShake .32s ease-out}
 @keyframes jmShake{20%{translate:3px -2px}40%{translate:-3px 2px}60%{translate:2px 1px}80%{translate:-1px -1px}}
 @media (max-width:700px){.jm-card{width:36px;height:50px;margin:-25px 0 0 -18px}.jm-card .hc-pip{font-size:1.1rem}.jm-card .hc-corner{font-size:.48rem}.jm-card .hc-back{font-size:1.1rem}.jm-chip{width:28px;height:28px;margin:-14px 0 0 -14px}}
 @media (prefers-reduced-motion:reduce){.jm-cards{display:none}}
@@ -688,7 +708,7 @@ else{window.addEventListener('load',loadHomeLiveSheet,{once:true});}
       data.slice(0,15).forEach((r,i)=>{
         let x='<span class="race-rank">#'+(i+1)+'</span><span class="win-user">'+_maskUser(r.user)+'</span><span class="win-game">'+money(r.wagered)+' wagered</span>';
         if(PRIZE[i]) x+='<span class="win-game">→</span><span class="win-amt">'+money(PRIZE[i])+'</span>';
-        out.push(pill(x));
+        out.push(pill(x,i<3?'r'+(i+1):''));
         if(i===0&&data[1]) out.push(pill('<span class="race-ico">⚔️</span>#2 is <span class="win-amt">'+money(data[0].wagered-data[1].wagered)+'</span> behind first place'));
         if(i===9&&data[10]) out.push(pill('<span class="race-ico">🎯</span><span class="win-amt">'+money(data[9].wagered-data[10].wagered)+'</span> separates #10 and #11'));
       });
@@ -1190,7 +1210,7 @@ document.querySelectorAll('.card-rain').forEach(initCardRain);
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
 })();
 </script>
-<script src="storm.js?v=6"></script>
+<script src="storm.js?v=9"></script>
 <script src="motion.js?v=7"></script>
 </body>
 </html>
