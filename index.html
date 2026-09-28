@@ -160,6 +160,26 @@
 .socials-grid{grid-template-columns:repeat(4,1fr)!important;max-width:1100px!important}
 @media (max-width:900px){.socials-grid{grid-template-columns:1fr 1fr!important}}
 </style>
+<style>
+/* ===== Storm v2 (storm.js) ===== */
+.hero.jm-storm #particles,.hero.jm-storm .hero-cards{display:none}
+.jm-storm-cv{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.jm-cards{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;perspective:900px}
+.jm-card,.jm-chip{position:absolute;left:0;top:0;transform-style:preserve-3d;will-change:transform}
+.jm-card{width:52px;height:73px;margin:-36px 0 0 -26px}
+.jm-card .hc-face{box-shadow:0 6px 14px rgba(0,0,0,.5),0 0 14px rgba(255,140,40,.22)}
+.jm-chip{width:38px;height:38px;margin:-19px 0 0 -19px}
+.jm-chip i{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,#2a1a48 0 40%,#FCC200 41% 44%,transparent 45%),repeating-conic-gradient(#FCC200 0 18deg,#1b1430 18deg 45deg);box-shadow:0 0 0 2px #FCC200 inset,0 6px 12px rgba(0,0,0,.5),0 0 14px rgba(252,194,0,.35)}
+.jm-chip.purple i{background:radial-gradient(circle,#1b1430 0 40%,#b06bff 41% 44%,transparent 45%),repeating-conic-gradient(#b06bff 0 18deg,#140c26 18deg 45deg);box-shadow:0 0 0 2px #b06bff inset,0 6px 12px rgba(0,0,0,.5),0 0 14px rgba(176,107,255,.4)}
+.hero.jm-storm{cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text x='4' y='26' font-size='24'>⚡</text></svg>") 14 14,crosshair}
+.hero.jm-storm a,.hero.jm-storm button{cursor:pointer}
+.hero-accent.jm-zap{animation:jmZap .7s ease-out,jmGoldSweep 5s ease-in-out 1.6s infinite}
+@keyframes jmZap{0%{filter:brightness(2.6) drop-shadow(0 0 22px #fff6c8)}30%{filter:brightness(1.4) drop-shadow(0 0 14px rgba(252,194,0,.9))}55%{filter:brightness(2) drop-shadow(0 0 18px #fff6c8)}100%{filter:none}}
+.hero.jm-shake .hero-content{animation:jmShake .32s ease-out}
+@keyframes jmShake{20%{translate:3px -2px}40%{translate:-3px 2px}60%{translate:2px 1px}80%{translate:-1px -1px}}
+@media (max-width:700px){.jm-card{width:36px;height:50px;margin:-25px 0 0 -18px}.jm-card .hc-pip{font-size:1.1rem}.jm-card .hc-corner{font-size:.48rem}.jm-card .hc-back{font-size:1.1rem}.jm-chip{width:28px;height:28px;margin:-14px 0 0 -14px}}
+@media (prefers-reduced-motion:reduce){.jm-cards{display:none}}
+</style>
 </head>
 <body>
 <div id="jm-veil" aria-hidden="true"></div>
@@ -772,7 +792,7 @@ function bgLoop(now){
   requestAnimationFrame(bgLoop);
   if(now-_bgLast<25) return; // cap ~40fps to leave headroom for UI
   _bgLast=now;
-  if(_heroVisible){ (BG_MODE==='storm') ? drawStormFrame(now||performance.now()) : drawParticlesFrame(); }
+  if(_heroVisible && !window.JM_STORM){ (BG_MODE==='storm') ? drawStormFrame(now||performance.now()) : drawParticlesFrame(); } /* storm.js takes over when loaded */
 }
 // start bg loop after first paint
 requestAnimationFrame(bgLoop);
@@ -1142,6 +1162,7 @@ document.querySelectorAll('.card-rain').forEach(initCardRain);
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',go); else go();
 })();
 </script>
+<script src="storm.js?v=3"></script>
 <script src="motion.js?v=7"></script>
 </body>
 </html>
