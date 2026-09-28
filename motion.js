@@ -275,11 +275,7 @@
       tick.i = 1;
       if(sbar && sbar._jm){ var tot = (document.documentElement.scrollHeight - vh) || 1; sbar.style.width = Math.min(100, y / tot * 100) + '%'; }
       pars.forEach(function(el){ if(y < vh * 1.5) el.style.translate = '0 ' + (y * parseFloat(el.getAttribute('data-jm-par'))).toFixed(1) + 'px'; });
-      if(heroContent && y < vh * 1.3){
-        var k = Math.min(1, y / (vh * 0.85));
-        heroContent.style.translate = '0 ' + (y * 0.22).toFixed(1) + 'px';
-        heroContent.style.opacity = String(1 - k * 0.85);
-      }
+      /* hero text stays fully visible while scrolling (the code card must always be readable); only the background moves */
       if(heroCards && y < vh * 1.3) heroCards.style.translate = '0 ' + (y * -0.12).toFixed(1) + 'px';
       if(howline){
         var r = howline.parentNode.getBoundingClientRect();
