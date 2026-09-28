@@ -135,7 +135,7 @@
   }
   function buildPieces(){
     layer.innerHTML = ''; pieces = [];
-    var nCards = MOBILE ? 5 : 9, nChips = 0; /* chips removed on request */
+    var nCards = MOBILE ? 3 : 5, nChips = 0; /* chips removed on request */
     for(var i = 0; i < nCards + nChips; i++){
       var el = document.createElement('div');
       if(i < nCards){ el.className = 'jm-card'; el.innerHTML = cardHTML(i); }
