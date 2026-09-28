@@ -16,6 +16,13 @@
   var root = document.documentElement;
   var isHome = !!document.querySelector('.hero .hero-title');
 
+
+  /* shared "Copy Code" chip on page tops */
+  window.pgCopy = function(btn){
+    try{ navigator.clipboard && navigator.clipboard.writeText('JAKE'); }catch(e){}
+    var c = btn.querySelector('.pg-code-c'); btn.classList.add('done'); c.textContent = 'Copied ✓';
+    setTimeout(function(){ btn.classList.remove('done'); c.textContent = 'Copy Code'; }, 1600);
+  };
   /* ---------- 1. smooth scroll ---------- */
   var lenis = null;
   if(!RM && window.Lenis){
@@ -86,7 +93,7 @@
   /* elements the site already animates in on its own (they use .visible) are left alone */
   var OWN = '.rh-card,.reward-card,.podium-card,.social-card,.how-step,.faq-item,.hub-card,.tier-card,.bonus-card,.refer-hero-card';
   var REVEAL = [
-    '.section-header', '.rh-start', '.access-stake-banner-new', '.vip-rules-card', '.hrb-card', '.referral-gets',
+    '.section-header', '.rh-start', '.pg-start', '.jm-rail', '.access-stake-banner-new', '.vip-rules-card', '.hrb-card', '.referral-gets',
     '.lb-tabs', '.countdown-bar', '.lb-pool-card', '.cutoff-banner', '.lb-podium-wrap', '.lb-table-wrap', '.wager-rules', '.claim-notice',
     '.refer-update-banner', '.refer-section-label', '.rg-card', '.ref-step', '.refer-cta', '.refer-fine',
     '.stream-info', '.stream-card', '.paid-inner', '.legal-wrap',
@@ -201,7 +208,7 @@
       })(t0);
     });
   }, { threshold: 0.6 }) : null;
-  if(cntIO) document.querySelectorAll('.rh-stat b,.rh-art-big,.reward-amount,.tier-reward,.tc-reward,.rg-val,.bonus-amount-badge,.paid-counter-static').forEach(function(el){
+  if(cntIO) document.querySelectorAll('.pg-stat b,.pc-val,.rh-stat b,.rh-art-big,.reward-amount,.tier-reward,.tc-reward,.rg-val,.bonus-amount-badge,.paid-counter-static').forEach(function(el){
     if(el.children.length) return;
     var t = el.textContent.trim(); if(!NUM.test(t)) return;
     el.setAttribute('data-jm-orig', t); cntIO.observe(el);
