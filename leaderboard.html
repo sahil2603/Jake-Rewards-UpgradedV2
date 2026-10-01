@@ -15,7 +15,7 @@
   <meta name="description" content="Compete in Jake's $75,000 monthly leaderboard on Stake. Track top grinders, prizes and your position. Use code JAKE to enter."/>
   <meta property="og:title" content="$75,000 Leaderboard — JakeRewards"/>
   <meta property="og:description" content="Compete in Jake's $75,000 monthly leaderboard on Stake. Use code JAKE."/>
-  <meta property="og:image" content="https://sahil2603.github.io/Jake-Rewards-UpgradedV2/og-image.png?v=13"/>
+  <meta property="og:image" content="https://sahil2603.github.io/Jake-Rewards-UpgradedV2/og-image.png?v=15"/>
   <meta property="og:image:width" content="1200"/>
   <meta property="og:image:height" content="630"/>
   <meta property="og:type" content="website"/>
@@ -23,11 +23,11 @@
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="$75,000 Leaderboard — JakeRewards"/>
   <meta name="twitter:description" content="Compete in Jake's $75,000 monthly leaderboard on Stake. Use code JAKE."/>
-  <meta name="twitter:image" content="https://sahil2603.github.io/Jake-Rewards-UpgradedV2/og-image.png?v=13"/>
+  <meta name="twitter:image" content="https://sahil2603.github.io/Jake-Rewards-UpgradedV2/og-image.png?v=15"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
-  <link rel="stylesheet" href="motion.css?v=7"/>
+  <link rel="stylesheet" href="motion.css?v=8"/>
   <style>
     .lb-wrap{max-width:900px;margin:0 auto;padding:2rem 2.5rem 6rem;}
     .lb-tabs{display:flex;gap:.5rem;margin-bottom:2rem;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:.4rem;width:fit-content;}
@@ -52,6 +52,26 @@
     .wager-rules ul{list-style:none;display:flex;flex-direction:column;gap:.5rem;}
     .wager-rules li{font-size:.8rem;color:var(--text2);padding-left:1.2rem;position:relative;}
     .wager-rules li::before{content:'•';position:absolute;left:0;color:var(--accent);}
+    /* How payouts work (October 2026) */
+    .lb-pay{margin-top:1.4rem;padding:1.5rem;border-radius:var(--radius);background:linear-gradient(160deg,rgba(252,194,0,.07),var(--card) 55%);border:1px solid rgba(252,194,0,.2)}
+    .lb-pay h4{font-family:var(--font-head);font-size:.85rem;font-weight:700;color:var(--gold);margin-bottom:1rem}
+    .lb-pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+    .lb-pay-card{display:flex;gap:.9rem;align-items:flex-start;padding:1rem 1.1rem;border-radius:14px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.07);transition:transform .3s cubic-bezier(.22,1,.36,1),border-color .3s,box-shadow .3s}
+    .lb-pay-card:hover{transform:translateY(-3px)}
+    .lb-pay-card.top:hover{border-color:rgba(252,194,0,.4);box-shadow:0 14px 30px -14px rgba(252,194,0,.4)}
+    .lb-pay-card.auto:hover{border-color:rgba(0,212,255,.4);box-shadow:0 14px 30px -14px rgba(0,212,255,.35)}
+    .lb-pay-ico{flex:none;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:1.2rem;background:rgba(252,194,0,.12)}
+    .lb-pay-card.auto .lb-pay-ico{background:rgba(0,212,255,.12);animation:lbZap 2.6s ease-in-out infinite}
+    @keyframes lbZap{0%,100%{box-shadow:0 0 0 0 rgba(0,212,255,.35)}50%{box-shadow:0 0 0 7px rgba(0,212,255,0)}}
+    .lb-pay-card b{display:block;font-family:var(--font-head);font-size:.95rem;color:#fff;margin-bottom:.25rem}
+    .lb-pay-card p{font-size:.82rem;color:var(--text2);line-height:1.55;margin:0}
+    .lb-pay-card p strong{color:#fff}
+    .lb-pay-floor{display:flex;gap:.7rem;align-items:center;margin-top:.9rem;padding:.75rem 1rem;border-radius:12px;font-size:.82rem;color:var(--text2);background:rgba(74,222,128,.06);border:1px solid rgba(74,222,128,.22)}
+    .lb-pay-floor strong{color:#fff}
+    .lb-pay-up{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:.7rem;color:#052e16;background:linear-gradient(135deg,#86efac,#22c55e);animation:lbUp 1.8s ease-in-out infinite}
+    @keyframes lbUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+    @media(max-width:700px){.lb-pay-grid{grid-template-columns:1fr}.lb-pay{padding:1.2rem}}
+    @media(prefers-reduced-motion:reduce){.lb-pay-card.auto .lb-pay-ico,.lb-pay-up{animation:none}}
 
     .lb-table td{vertical-align:middle;}
     .lb-userwrap{display:flex;align-items:center;gap:10px;}
@@ -689,6 +709,21 @@
     </ul>
   </div>
 
+  <div class="lb-pay" id="lbPay">
+    <h4>💸 How payouts work</h4>
+    <div class="lb-pay-grid">
+      <div class="lb-pay-card top">
+        <span class="lb-pay-ico">🏆</span>
+        <div><b>Top 10</b><p>Open a <strong>support ticket</strong> in the Discord to claim your payout once the board resets.</p></div>
+      </div>
+      <div class="lb-pay-card auto">
+        <span class="lb-pay-ico">⚡</span>
+        <div><b>11th – 100th</b><p>Paid <strong>automatically</strong> within <strong>48–120 hours</strong> of the reset. Nothing to do.</p></div>
+      </div>
+    </div>
+    <div class="lb-pay-floor"><span class="lb-pay-up">▲</span><span><strong>Floor raised from October 2026:</strong> every paid place now gets at least <strong>$50</strong> (was $25), and 51st–60th now pay <strong>$100</strong>.</span></div>
+  </div>
+
   <div class="claim-notice">
     <span class="claim-notice-icon">⚠️</span>
     <span class="claim-notice-text">Players must <strong>join the Discord</strong> to claim rewards and may need to <strong>submit a support ticket</strong>.</span>
@@ -721,10 +756,26 @@
 const SHEET_CSV = 'https://docs.google.com/spreadsheets/d/1SW5j8VUSEcbj2Te9naiFB_zQzpwyjWnsjKyMxcM5l90/export?format=csv&gid=235680015';
 const SHEET_CSV_PREV = 'https://docs.google.com/spreadsheets/d/1SW5j8VUSEcbj2Te9naiFB_zQzpwyjWnsjKyMxcM5l90/export?format=csv&gid=1502602180';
 const DISPLAY_ROWS = 110;
+/* Prize table from the October 2026 board onwards (set by Jake). Top 3 also get lossback. */
 const _LB_PRIZES = [
-  {cash:20000,lb:true},{cash:10000,lb:true},{cash:5000,lb:true},
-  {cash:4000,lb:true},{cash:3500,lb:true},{cash:3000,lb:true},
-  {cash:2500,lb:true},{cash:2250,lb:true},{cash:2000,lb:true},{cash:1650,lb:true},
+  {cash:20000,lb:'10%'},{cash:10000,lb:'7.5%'},{cash:5000,lb:'5%'},
+  4000,3500,3000,2500,2250,2000,1650,
+  1400,1300,1250,1125,1000,950,875,750,700,675,
+  650,600,550,450,400,350,325,300,275,250,
+  225,200,195,190,180,175,170,165,160,155,
+  150,145,140,135,130,125,120,115,110,105,
+  100,100,100,100,100,100,100,100,100,100,
+  90,90,90,90,90,90,90,90,90,90,
+  75,75,75,75,75,75,75,75,75,75,
+  60,60,60,60,60,60,60,60,60,60,
+  50,50,50,50,50,50,50,50,50,50
+];
+/* Previous table -- still used for the "Previous Month" view of any board that ended at or before
+   the switch (the September 2026 board paid out under these). */
+const _LB_PRIZES_OLD = [
+  {cash:20000,lb:'5%'},{cash:10000,lb:'5%'},{cash:5000,lb:'5%'},
+  {cash:4000,lb:'5%'},{cash:3500,lb:'5%'},{cash:3000,lb:'5%'},
+  {cash:2500,lb:'5%'},{cash:2250,lb:'5%'},{cash:2000,lb:'5%'},{cash:1650,lb:'5%'},
   1400,1300,1250,1200,1100,1000,950,900,850,800,
   750,700,650,600,550,500,450,400,350,300,
   250,200,195,190,180,170,160,150,140,125,
@@ -736,11 +787,20 @@ const _LB_PRIZES = [
   25,25,25,25,25,25,25,25,25,25,
   25
 ];
+const _LB_NEW_PRIZES_FROM = Date.UTC(2026, 8, 30, 14, 0, 0); /* Sep 30 2026, 10:00 AM New York -- the reset that started the October board */
+function _prizeTable(){
+  if(_currentTab !== 'previous') return _LB_PRIZES;
+  try{
+    const next = getNextReset();
+    const lastReset = monthEndUTC(next.getUTCFullYear(), next.getUTCMonth() - 1); /* when the "previous" board ended */
+    return (lastReset.getTime() <= _LB_NEW_PRIZES_FROM + 6*3600*1000) ? _LB_PRIZES_OLD : _LB_PRIZES;
+  }catch(e){ return _LB_PRIZES; }
+}
 let _liveData=null, _prevData=null, _liveMode=false, _prevMode=false, _lbObs=null, _currentTab='current';
 
 function toggleMobile(){document.getElementById('mobile-nav').classList.toggle('open');}
 function fmtShort(n){if(n>=1e6)return '$'+(n/1e6).toFixed(2)+'M';if(n>=1e3)return '$'+(n/1e3).toFixed(1)+'K';return '$'+Math.round(n);}
-function _getPrizeLabel(idx){const p=_LB_PRIZES[idx];if(!p)return '—';if(typeof p==='object')return '$'+p.cash.toLocaleString()+' + 5% lossback';return '$'+p.toLocaleString();}
+function _getPrizeLabel(idx){const p=_prizeTable()[idx];if(!p)return '—';if(typeof p==='object')return '$'+p.cash.toLocaleString()+' + '+p.lb+' lossback';return '$'+p.toLocaleString();}
 function maskUser(n){if(!n)return '—';if(n.length<=5)return '*'.repeat(n.length);return '*'.repeat(5)+n.slice(5);}
 
 // Store prev ranks for change indicators
