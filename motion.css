@@ -243,3 +243,9 @@ html.jm-leaving #jm-veil{animation:jmVeilIn .3s ease forwards}
 .vt-cta span{transition:transform .25s}.vt-cta:hover span{transform:translateX(4px)}
 @media (max-width:700px){.vt-wrap{padding:0 1rem 2rem}.vt-wrap.vt-in-section{padding:1.5rem 0 0}.vt-soon{flex-direction:column;text-align:center;padding:1.4rem 1.2rem}.vt-cta{width:100%;justify-content:center}}
 @media (prefers-reduced-motion:reduce){.vt-sweep,.vt-ico em,.vt-ico i,.vt-tag i{animation:none}}
+
+/* paused while off-screen (set by motion.js) */
+.jm-pz,.jm-pz *,.jm-pz *::before,.jm-pz *::after,.jm-pz::before,.jm-pz::after{animation-play-state:paused!important}
+
+/* small phones: page titles like "$75,000 LEADERBOARD" were wider than the screen */
+@media (max-width:480px){.page-hero h1{font-size:clamp(1.8rem,9vw,2.5rem);letter-spacing:1.5px;overflow-wrap:anywhere}}

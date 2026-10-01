@@ -334,3 +334,19 @@
     });
   }
 })();
+
+/* ── Performance: pause every looping CSS animation inside sections that are off-screen ──
+   Looping glows/shines keep the browser repainting even when you can't see them, which is what
+   makes long pages stutter on phones. Sections resume (with 200px of lead) as they scroll back in. */
+(function(){
+  if(!('IntersectionObserver' in window)) return;
+  var SEL = 'section, footer, .page-hero, .hero, .lb-wrap > *, .refer-wrap > *, .rh-grid > *, .rh-start, .vt-wrap, .tiers-grid > *, .bonus-card, .wins-ticker, .rewards-grid > *, .faq-item, .pg-strip';
+  function arm(){
+    var els = [].slice.call(document.querySelectorAll(SEL));
+    if(!els.length) return;
+    var io = new IntersectionObserver(function(es){ es.forEach(function(e){ e.target.classList.toggle('jm-pz', !e.isIntersecting); }); }, { rootMargin: '200px 0px' });
+    els.forEach(function(el){ if(!el.__jmPz){ el.__jmPz = 1; io.observe(el); } });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arm); else arm();
+  window.addEventListener('load', arm);
+})();
