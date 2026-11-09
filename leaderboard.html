@@ -606,15 +606,6 @@
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',build); else build();
 })();
 </script>
-<style>
-.jr-lbnote{display:flex;align-items:center;gap:.8rem;margin:0 0 1.4rem;padding:.75rem 1rem;border-radius:12px;background:rgba(252,194,0,.05);border:1px solid rgba(252,194,0,.2)}
-.jr-lbnote-i{flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:1rem;color:var(--gold);border:1px solid rgba(252,194,0,.35);animation:jrSpinBack 6s linear infinite}
-@keyframes jrSpinBack{to{rotate:-360deg}}
-.jr-lbnote p{margin:0;font-size:.84rem;line-height:1.5;color:var(--text2)}
-.jr-lbnote b{color:#fff}
-.jr-lbnote a{color:var(--gold);font-weight:700;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}
-@media(prefers-reduced-motion:reduce){.jr-lbnote-i{animation:none}}
-</style>
 </head>
 <body>
 <div id="jm-veil" aria-hidden="true"></div>
@@ -685,7 +676,6 @@
     <div class="lb-pool-card"><span class="pc-ico">🔥</span><div class="pc-label">Players Competing</div><div class="pc-val" id="lb-playercount">—</div><span class="pc-live"><i></i>live</span></div>
   </div>
 
-  <div class="jr-lbnote" role="note"><span class="jr-lbnote-i" aria-hidden="true">↺</span><p><b>1st–3rd also earn lossback</b> (10% / 7.5% / 5%). <a href="lossback.html">How lossback works</a></p></div>
   <div class="rank-ticker" id="rank-ticker" style="display:none;">
     <span class="rank-ticker-label">⚡ Live</span>
     <div class="rank-ticker-track-wrap"><div class="rank-ticker-track" id="rank-ticker-track"></div></div>
